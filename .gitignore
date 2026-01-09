@@ -1,0 +1,8 @@
+# ignore .venv directories
+.venv/
+Notes/
+cv.txt
+extract_assignment.py
+guidelines.txt
+# File names starting with SOC
+SOC*
