@@ -6,3 +6,8 @@ extract_assignment.py
 guidelines.txt
 # File names starting with SOC
 SOC*
+
+# ignore tex outputfiles
+*.aux
+*.log
+*.out
