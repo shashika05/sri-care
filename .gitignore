@@ -11,3 +11,7 @@ SOC*
 *.aux
 *.log
 *.out
+
+# ignore maven target directories
+**/target/
+*.jar
