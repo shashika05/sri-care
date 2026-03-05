@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: sritel-postgres
+    environment:
+      POSTGRES_USER: sritel
+      POSTGRES_PASSWORD: sritel
+      POSTGRES_DB: sritel
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  external-system-mocks:
+    build:
+      context: ./src/sritel-parent
+      dockerfile: ./external-system-mocks/Dockerfile
+    ports:
+      - "8081:8081"
+
+  user-service:
+    build:
+      context: ./src/sritel-parent
+      dockerfile: ./user-service/Dockerfile
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/sritel
+      DB_USER: sritel
+      DB_PASS: sritel
+    depends_on:
+      - postgres
+    ports:
+      - "8082:8082"
+
+  billing-service:
+    build:
+      context: ./src/sritel-parent
+      dockerfile: ./billing-service/Dockerfile
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/sritel
+      DB_USER: sritel
+      DB_PASS: sritel
+      PAYMENT_URL: http://external-system-mocks:8081/payment/process
+      PROVISION_URL: http://external-system-mocks:8081/provisioning/activate
+      NOTIFICATION_URL: http://notification-service:8084/notify
+    depends_on:
+      - postgres
+      - external-system-mocks
+      - notification-service
+    ports:
+      - "8083:8083"
+
+  notification-service:
+    build:
+      context: ./src/sritel-parent
+      dockerfile: ./notification-service/Dockerfile
+    ports:
+      - "8084:8084"
+
+volumes:
+  postgres_data:

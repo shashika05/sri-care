@@ -15,6 +15,23 @@ The project is a Maven Multi-Module project located in `src/sritel-parent`. It c
 
 - Java 17 or higher
 - Maven 3.x+
+- Docker (for containerized run)
+
+## Run with Docker (PostgreSQL Included)
+
+From the project root directory:
+
+```bash
+docker compose up --build
+```
+
+This will start:
+
+- PostgreSQL on port 5432
+- external-system-mocks on port 8081
+- user-service on port 8082
+- billing-service on port 8083
+- notification-service on port 8084
 
 ## How to Run the Prototype
 
